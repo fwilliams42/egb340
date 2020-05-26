@@ -1,0 +1,38 @@
+{
+    "users": {
+        "Fraser":
+        {
+            "Records":
+            {
+                "Data": [
+                    1.0,
+                    2.0
+                ]
+            }
+        },
+        "Blair":
+        {
+            "Records":
+            {
+                "Data": [
+                    1.0,
+                    2.0
+                ]
+            }
+        },
+        "Long":
+        {
+            "Records":
+            {
+                "Data": [
+                    1.0,
+                    2.0
+                ]
+            }
+        }
+            
+    },
+    "debug": [
+        "Clear Data"
+    ]
+}

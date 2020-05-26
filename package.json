@@ -1,0 +1,20 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "Web serving and hardware control for a RPi project.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "author": "Fraser Williams",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.engine": "^0.3.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

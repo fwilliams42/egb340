@@ -1,0 +1,40 @@
+{
+    "headings": [
+        "Rank",
+        "First",
+        "Last",
+        "Score"
+    ],
+    "data": [
+        {
+            "rank": 2,
+            "first": "Fraser",
+            "last": "Williams",
+            "score": 12
+        },
+        {
+            "rank": 3,
+            "first": "Jesse",
+            "last": "Mason",
+            "score": 13
+        },
+        {
+            "rank": 4,
+            "first": "Blair",
+            "last": "St. Ledger",
+            "score": 12
+        },
+        {
+            "rank": 5,
+            "first": "Long",
+            "last": "Wang",
+            "score": 11
+        },
+        {
+            "rank": 6,
+            "first": "Sam",
+            "last": "Langford",
+            "score": 14
+        }
+    ]
+}
