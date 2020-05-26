@@ -7,10 +7,16 @@
     ],
     "data": [
         {
+            "rank": 1,
+            "first": "Sam",
+            "last": "Langford",
+            "score": 14
+        },
+        {
             "rank": 2,
             "first": "Fraser",
             "last": "Williams",
-            "score": 12
+            "score": 13
         },
         {
             "rank": 3,
@@ -29,12 +35,6 @@
             "first": "Long",
             "last": "Wang",
             "score": 11
-        },
-        {
-            "rank": 6,
-            "first": "Sam",
-            "last": "Langford",
-            "score": 14
         }
     ]
 }
