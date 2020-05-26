@@ -10,9 +10,7 @@
   "author": "Fraser Williams",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "socket.engine": "^0.3.0",
-    "socket.io": "^2.3.0"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

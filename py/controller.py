@@ -3,16 +3,12 @@ import json
 from datetime import datetime
 import time
 from gpiozero import LED, Button, HoldMixin, DigitalInputDevice
-import signal
 
 import board
 import busio
 import digitalio
 from PIL import Image, ImageDraw, ImageFont
 import adafruit_pcd8544
-
-from collections import OrderedDict
-import threading
 
 import requests
 
