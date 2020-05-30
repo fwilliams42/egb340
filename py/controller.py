@@ -285,8 +285,11 @@ def flash_menu():
 def toggle_leds():
     print("This will toggle LEDs")
 
-func_dict = {'lcd': flash_menu, 'toggle': toggle_leds}
+server_allowed_funcs = {'lcd': flash_menu, 'toggle': toggle_leds}
 
 while True:
     func = input()
-    func_dict[func]()
+    try:
+        server_allowed_funcs[func]()
+    except:
+        pass
