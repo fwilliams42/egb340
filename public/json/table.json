@@ -8,33 +8,15 @@
     "data": [
         {
             "rank": 1,
-            "first": "Sam",
-            "last": "Langford",
-            "score": 14
+            "first": "Fraser",
+            "last": "Williams",
+            "score": 15
         },
         {
             "rank": 2,
-            "first": "Fraser",
-            "last": "Williams",
-            "score": 13
-        },
-        {
-            "rank": 3,
-            "first": "Jesse",
-            "last": "Mason",
-            "score": 13
-        },
-        {
-            "rank": 4,
             "first": "Blair",
             "last": "St. Ledger",
             "score": 12
-        },
-        {
-            "rank": 5,
-            "first": "Long",
-            "last": "Wang",
-            "score": 11
         }
     ]
 }

@@ -147,7 +147,7 @@ class Menu():
         display.show()
         
     def timing(self, btn):  
-        # pass
+        
         while btn.is_pressed:
             draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
             sec = round((datetime.now() - btn.start_time).total_seconds(), 2)
@@ -162,19 +162,19 @@ class Menu():
 
             display.image(image)
             display.show()
-
             
-            time.sleep(0.1)
+            time.sleep(0.2)
             
 menu = Menu()
 menu.update()
 
 class TimingButton(Button):
-    def __init__(self, pin=None, pull_up=False, active_state=None, bounce_time=None, hold_time=1, hold_repeat=False, pin_factory=None):
+    def __init__(self, pin=None, pull_up=False, active_state=None, bounce_time=None, hold_time=1, hold_repeat=False, pin_factory=None, number=None):
         super().__init__(pin=pin, pull_up=pull_up, active_state=active_state, bounce_time=bounce_time, hold_time=hold_time, hold_repeat=hold_repeat, pin_factory=pin_factory)
         self.start_time = datetime.now()
         self.end_time = datetime.now()
         self.is_timing = False
+        self.number = number
 
 # Setup i/o
 led = LED(17)
@@ -182,7 +182,8 @@ btn1 = Button(26)
 btn2 = Button(16)
 btn3 = Button(4)
 btn4 = Button(12)
-btn_tb1 = TimingButton(21)
+btn_tb1 = TimingButton(pin=21, number=1)
+# btn_tb2 = TimingButton(pin=21, number=2)
 
 def btn1handler():
     menu.enter()
@@ -202,42 +203,69 @@ def btn4handler():
     menu.update()
     # led.toggle()
 
-def btn_tb1handler_pressed():
-    # menu.update()
-    btn_tb1.is_timing = True
+def btn_tb_gen_pressed(btn):
+    btn.is_timing = True
 
     print('Timing started.')
-    btn_tb1.start_time = datetime.now()
+    btn.start_time = datetime.now()
 
-    menu.timing(btn_tb1)
+    menu.timing(btn)
 
-def btn_tb1handler_released():
-    # menu.update()
-    btn_tb1.is_timing = False
+def btn_tb_gen_released(btn):
+    btn.is_timing = False
 
     print('Timing cancelled.')
-    btn_tb1.end_time = datetime.now()
+    btn.end_time = datetime.now()
 
-    t = btn_tb1.start_time.isoformat(sep=' ', timespec='minutes')
-    dt = round((btn_tb1.end_time - btn_tb1.start_time).total_seconds(), 2)
+    t = btn.start_time.isoformat(sep=' ', timespec='minutes')
+    dt = round((btn.end_time - btn.start_time).total_seconds(), 2)
 
     if (dt < 1): # 1 second min otherwise won't count
         menu.update()
         return
+
+    new_data_point = {'t': t, 'y': dt}
+
+    user = updateChart(btn, new_data_point)
+    updateTable(btn, user)
     
+    menu.update()
+
+def updateChart(btn, new_data_point):
+    # Add the new data point
     with open('public/json/chart.json', 'r') as f:
         chart_data = json.load(f)
 
-    newdatapoint = {'t': t, 'y': dt}
-    print(newdatapoint)
-
     # chart_data['data']['datasets'][$user$]['data'][$datapoint$]
-    chart_data['data']['datasets'][0]['data'].append(newdatapoint) 
+    chart_data['data']['datasets'][btn.number-1]['data'].append(new_data_point) 
 
     with open('public/json/chart.json', 'w') as f:
         json.dump(chart_data, f, ensure_ascii=False, indent=4)
 
-    menu.update()
+    return chart_data['data']['datasets'][btn.number-1]['label']
+
+def updateTable(btn, user):
+    # Update the score
+    with open('public/json/table.json', 'r') as f:
+        table_data = json.load(f)
+
+    for data in table_data['data']:
+        if (data['first'] == user):
+            data['score'] += 1
+
+    table_data['data'] = sorted(table_data['data'], key = lambda k: k['score'], reverse=True)
+    
+    for i, item in enumerate(table_data['data'], start=1):
+        item['rank'] = i
+
+    with open('public/json/table.json', 'w') as f:
+        json.dump(table_data, f, ensure_ascii=False, indent=4)
+
+def btn_tb1handler_pressed():
+    btn_tb_gen_pressed(btn_tb1)
+
+def btn_tb1handler_released():
+    btn_tb_gen_released(btn_tb1)
 
 # Event handlers
 btn1.when_activated = btn1handler
