@@ -108,12 +108,11 @@ class Menu():
             self.parentlist.append(temp)
             self.options = list(temp.keys())
             self.current = self.options[0]
+            self.update()
         elif isinstance(temp, list):
             # Trigger display of the list
+            self.disp_list(temp)
             pass
-
-        # print(self.parentlist)
-        self.update()
 
     def exit(self):
 
@@ -124,14 +123,12 @@ class Menu():
             
         self.update()
 
-    # print(self.parentlist)
 
     def update(self):
-        # display.fill(0)
+
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
 
-        for i in range(len(self.options)):
-            text = self.options[i]
+        for i, text in enumerate(self.options):
 
             if text == self.current:
                 text += " *"
@@ -143,6 +140,24 @@ class Menu():
                 fill=255,
             )
 
+        display.image(image)
+        display.show()
+    
+    def disp_list(self, li):
+        
+        draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
+
+        for i, val in enumerate(li):
+            
+            text = str(val)
+            draw.text(
+                (BORDER, BORDER + i * font_height),
+                text,
+                font=font,
+                fill=255,
+            )
+            print(text)
+        
         display.image(image)
         display.show()
         
@@ -187,7 +202,6 @@ btn_tb1 = TimingButton(pin=21, number=1)
 
 def btn1handler():
     menu.enter()
-    menu.update()
     # led.toggle() 
 
 def btn2handler():
@@ -195,12 +209,10 @@ def btn2handler():
 
 def btn3handler():
     menu.csr_down()
-    menu.update()
     # led.toggle()
 
 def btn4handler():
     menu.csr_up()
-    menu.update()
     # led.toggle()
 
 def btn_tb_gen_pressed(btn):
