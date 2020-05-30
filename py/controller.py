@@ -1,16 +1,14 @@
 # RPi
 import json
-from datetime import datetime
 import time
-from gpiozero import LED, Button, HoldMixin, DigitalInputDevice
+from datetime import datetime
+from gpiozero import LED, Button
 
 import board
 import busio
 import digitalio
-from PIL import Image, ImageDraw, ImageFont
 import adafruit_pcd8544
-
-import requests
+from PIL import Image, ImageDraw, ImageFont
 
 # Parameters to Change
 BORDER = 5
@@ -36,39 +34,14 @@ backlight.value = True
 display.fill(0)
 display.show()
 
-# Create blank image for drawing.
-# Make sure to create image with mode '1' for 1-bit color.
+# Create blank image for drawing. 1 bit colour
 image = Image.new("1", (display.width, display.height))
 
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
 
-# Draw a black background
-draw.rectangle((0, 0, display.width, display.height), outline=255, fill=255)
-
-# Draw a smaller inner rectangle
-draw.rectangle(
-    (BORDER, BORDER, display.width - BORDER - 1, display.height - BORDER - 1),
-    outline=0,
-    fill=0,
-)
-
 # Load a TTF font.
 font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FONTSIZE)
-
-# Draw Some Text
-text = "Welcome!"
-(font_width, font_height) = font.getsize(text)
-draw.text(
-    (display.width // 2 - font_width // 2, display.height // 2 - font_height // 2),
-    text,
-    font=font,
-    fill=255,
-)
-
-# Display image
-display.image(image)
-display.show()
 
 # New classes
 
@@ -143,7 +116,7 @@ class Menu():
                 text += " *"
 
             draw.text(
-                (BORDER, BORDER + i * font_height),
+                (BORDER, BORDER + i * FONTSIZE),
                 text,
                 font=font,
                 fill=255,
@@ -163,7 +136,7 @@ class Menu():
             text = f"{key}: {val}"
 
             draw.text(
-                (BORDER, BORDER + i * font_height),
+                (BORDER, BORDER + i * FONTSIZE),
                 text,
                 font=font,
                 fill=255,
