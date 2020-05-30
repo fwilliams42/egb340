@@ -90,7 +90,10 @@ class Menu():
         else:
             self.current = self.options[-1]
 
-        print(self.current)
+        if self.current == 'disp_key_val':
+            self.csr_up()
+
+        self.update()
 
     def csr_down(self):
         ind = self.options.index(self.current) # Get the current index
@@ -99,20 +102,29 @@ class Menu():
             self.current = self.options[ind + 1] # Set the currently selected option to the next
         else:
             self.current = self.options[0]
+
+        if self.current == 'disp_key_val':
+            self.csr_down()
+
+        self.update()
         
     def enter(self):
         
         temp = self.parentlist[-1][self.current] # Menu option going into
 
-        if isinstance(temp, dict):
-            self.parentlist.append(temp)
-            self.options = list(temp.keys())
-            self.current = self.options[0]
+        # if isinstance(temp, dict):
+        self.parentlist.append(temp)
+        self.options = list(temp.keys())
+        self.current = self.options[0]
+        
+        if temp['disp_key_val']:
+            self.disp_key_val()
+        else:
             self.update()
-        elif isinstance(temp, list):
-            # Trigger display of the list
-            self.disp_list(temp)
-            pass
+        # elif isinstance(temp, list):
+        #     # Trigger display of the list
+        #     self.disp_list(temp)
+        #     pass
 
     def exit(self):
 
@@ -123,13 +135,15 @@ class Menu():
             
         self.update()
 
-
     def update(self):
 
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
 
         for i, text in enumerate(self.options):
 
+            if text == 'disp_key_val':
+                continue
+            
             if text == self.current:
                 text += " *"
 
@@ -156,10 +170,32 @@ class Menu():
                 font=font,
                 fill=255,
             )
-            print(text)
         
         display.image(image)
         display.show()
+    
+    def disp_key_val(self):
+        draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
+
+        i = 0
+        for key, val in self.parentlist[-1].items():
+            if key == 'disp_key_val':
+                continue
+            
+            text = f"{key}: {val}"
+
+            draw.text(
+                (BORDER, BORDER + i * font_height),
+                text,
+                font=font,
+                fill=255,
+            )
+
+            i += 1
+        
+        display.image(image)
+        display.show()
+
         
     def timing(self, btn):  
         
@@ -238,8 +274,9 @@ def btn_tb_gen_released(btn):
 
     new_data_point = {'t': t, 'y': dt}
 
-    user = updateChart(btn, new_data_point)
-    updateTable(btn, user)
+    user, secs = updateChart(btn, new_data_point)
+    score, rank = updateTable(user)
+    updateMenuStats(user, score, rank, secs)
     
     menu.update()
 
@@ -254,24 +291,46 @@ def updateChart(btn, new_data_point):
     with open('public/json/chart.json', 'w') as f:
         json.dump(chart_data, f, ensure_ascii=False, indent=4)
 
-    return chart_data['data']['datasets'][btn.number-1]['label']
+    temp = chart_data['data']['datasets'][btn.number-1]
 
-def updateTable(btn, user):
+    user = temp['label']
+    total_secs = sum(item['y'] for item in temp['data'])
+
+    return user, total_secs
+
+def updateTable(user):
     # Update the score
     with open('public/json/table.json', 'r') as f:
         table_data = json.load(f)
 
-    for data in table_data['data']:
-        if (data['first'] == user):
-            data['score'] += 1
+    user_index = find(table_data['data'], 'first', user)
 
-    table_data['data'] = sorted(table_data['data'], key = lambda k: k['score'], reverse=True)
+    table_data['data'][user_index]['score'] += 1
+
+    table_data['data'] = sorted(table_data['data'], key = lambda k: k['score'], reverse = True)
     
     for i, item in enumerate(table_data['data'], start=1):
         item['rank'] = i
 
     with open('public/json/table.json', 'w') as f:
         json.dump(table_data, f, ensure_ascii=False, indent=4)
+
+    temp = table_data['data'][user_index]
+
+    return temp['score'], temp['rank']
+
+def updateMenuStats(user, score, rank, secs):
+    with open('public/json/menu.json', 'r') as f:
+        menu_data = json.load(f)
+    
+    menu_data['users'][user]['data'] = {
+        'rank': rank,
+        'score': score,
+        'secs': secs
+    }
+
+    with open('public/json/menu.json', 'w') as f:
+        json.dump(menu_data, f, ensure_ascii=False, indent=4)
 
 def btn_tb1handler_pressed():
     btn_tb_gen_pressed(btn_tb1)
@@ -288,6 +347,14 @@ btn_tb1.when_pressed = btn_tb1handler_pressed
 btn_tb1.when_released = btn_tb1handler_released
 
 print("Hardware controller started...")
+
+# Useful functions elsewhere
+
+def find(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return i
+    return None
 
 # Website to hardware functionality
 

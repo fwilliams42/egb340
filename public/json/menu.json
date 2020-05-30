@@ -1,38 +1,24 @@
 {
     "users": {
-        "Fraser":
-        {
-            "Records":
-            {
-                "Data": [
-                    1.0,
-                    2.0
-                ]
-            }
+        "Fraser": {
+            "data": {
+                "rank": 1,
+                "score": 25,
+                "secs": 132.73,
+                "disp_key_val": true
+            },
+            "disp_key_val": false
         },
-        "Blair":
-        {
-            "Records":
-            {
-                "Data": [
-                    1.0,
-                    2.0
-                ]
-            }
+        "Blair": {
+            "data": {
+                "rank": 2,
+                "score": 10,
+                "secs": 100,
+                "disp_key_val": true
+            },
+            "disp_key_val": false
         },
-        "Long":
-        {
-            "Records":
-            {
-                "Data": [
-                    1.0,
-                    2.0
-                ]
-            }
-        }
-            
+        "disp_key_val": false
     },
-    "debug": [
-        "Clear Data"
-    ]
+    "disp_key_val": false
 }
