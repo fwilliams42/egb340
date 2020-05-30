@@ -112,7 +112,6 @@ class Menu():
         
         temp = self.parentlist[-1][self.current] # Menu option going into
 
-        # if isinstance(temp, dict):
         self.parentlist.append(temp)
         self.options = list(temp.keys())
         self.current = self.options[0]
@@ -121,10 +120,6 @@ class Menu():
             self.disp_key_val()
         else:
             self.update()
-        # elif isinstance(temp, list):
-        #     # Trigger display of the list
-        #     self.disp_list(temp)
-        #     pass
 
     def exit(self):
 
@@ -157,23 +152,6 @@ class Menu():
         display.image(image)
         display.show()
     
-    def disp_list(self, li):
-        
-        draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
-
-        for i, val in enumerate(li):
-            
-            text = str(val)
-            draw.text(
-                (BORDER, BORDER + i * font_height),
-                text,
-                font=font,
-                fill=255,
-            )
-        
-        display.image(image)
-        display.show()
-    
     def disp_key_val(self):
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
 
@@ -196,7 +174,6 @@ class Menu():
         display.image(image)
         display.show()
 
-        
     def timing(self, btn):  
         
         while btn.is_pressed:
