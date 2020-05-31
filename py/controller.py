@@ -66,7 +66,8 @@ class Menu():
         if self.current == 'disp_key_val':
             self.csr_up()
 
-        self.update()
+        if not self.parentlist[-1]['disp_key_val']:
+            self.update()
 
     def csr_down(self):
         ind = self.options.index(self.current) # Get the current index
@@ -79,7 +80,9 @@ class Menu():
         if self.current == 'disp_key_val':
             self.csr_down()
 
-        self.update()
+        if not self.parentlist[-1]['disp_key_val']:
+            self.update()
+            
         
     def enter(self):
         
@@ -179,27 +182,24 @@ class TimingButton(Button):
 
 # Setup i/o
 led = LED(17)
-btn1 = Button(26)
-btn2 = Button(16)
-btn3 = Button(4)
-btn4 = Button(12)
-btn_tb1 = TimingButton(pin=21, number=1)
-# btn_tb2 = TimingButton(pin=21, number=2)
+enterBtn = Button(26)
+exitBtn = Button(16)
+downBtn = Button(4)
+upBtn = Button(12)
+tb1Btn = TimingButton(pin=21, number=1)
+# tb2Btn = TimingButton(pin=21, number=2)
 
-def btn1handler():
-    menu.enter()
-    # led.toggle() 
+def enterBtn_handler():
+    menu.enter() 
 
-def btn2handler():
+def exitBtn_handler():
     menu.exit()
 
-def btn3handler():
+def downBtn_handler():
     menu.csr_down()
-    # led.toggle()
 
-def btn4handler():
+def upBtn_handler():
     menu.csr_up()
-    # led.toggle()
 
 def btn_tb_gen_pressed(btn):
     btn.is_timing = True
@@ -244,7 +244,7 @@ def updateChart(btn, new_data_point):
     temp = chart_data['data']['datasets'][btn.number-1]
 
     user = temp['label']
-    total_secs = sum(item['y'] for item in temp['data'])
+    total_secs = round(sum(item['y'] for item in temp['data']), 2)
 
     return user, total_secs
 
@@ -282,19 +282,13 @@ def updateMenuStats(user, score, rank, secs):
     with open('public/json/menu.json', 'w') as f:
         json.dump(menu_data, f, ensure_ascii=False, indent=4)
 
-def btn_tb1handler_pressed():
-    btn_tb_gen_pressed(btn_tb1)
-
-def btn_tb1handler_released():
-    btn_tb_gen_released(btn_tb1)
-
 # Event handlers
-btn1.when_activated = btn1handler
-btn2.when_activated = btn2handler
-btn3.when_activated = btn3handler
-btn4.when_activated = btn4handler
-btn_tb1.when_pressed = btn_tb1handler_pressed
-btn_tb1.when_released = btn_tb1handler_released
+enterBtn.when_activated = enterBtn_handler
+exitBtn.when_activated = exitBtn_handler
+downBtn.when_activated = downBtn_handler
+upBtn.when_activated = upBtn_handler
+tb1Btn.when_pressed = btn_tb_gen_pressed
+tb1Btn.when_released = btn_tb_gen_released
 
 print("Hardware controller started...")
 
