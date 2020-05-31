@@ -87,6 +87,8 @@ class Menu():
     def enter(self):
         
         temp = self.parentlist[-1][self.current] # Menu option going into
+        # if not isinstance(temp, list):
+        #     return
 
         self.parentlist.append(temp)
         self.options = list(temp.keys())
@@ -152,7 +154,7 @@ class Menu():
 
     def timing(self, btn):  
         
-        while btn.is_pressed:
+        while btn.is_pressed: # not
             draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
             sec = round((datetime.now() - btn.start_time).total_seconds(), 2)
             text = str(sec)
@@ -182,12 +184,13 @@ class TimingButton(Button):
 
 # Setup i/o
 led = LED(17)
-enterBtn = Button(26)
-exitBtn = Button(16)
+
+enterBtn = Button(12)
+exitBtn = Button(26)
 downBtn = Button(4)
-upBtn = Button(12)
+upBtn = Button(16)
 tb1Btn = TimingButton(pin=21, number=1)
-# tb2Btn = TimingButton(pin=21, number=2)
+tb2Btn = TimingButton(pin=19, number=2)
 
 def enterBtn_handler():
     menu.enter() 
@@ -204,7 +207,7 @@ def upBtn_handler():
 def btn_tb_gen_pressed(btn):
     btn.is_timing = True
 
-    print('Timing started.')
+    print(f"Timing started on toothbrush {btn.number}.")
     btn.start_time = datetime.now()
 
     menu.timing(btn)
@@ -212,7 +215,7 @@ def btn_tb_gen_pressed(btn):
 def btn_tb_gen_released(btn):
     btn.is_timing = False
 
-    print('Timing cancelled.')
+    print(f"Timing cancelled on toothbrush {btn.number}.")
     btn.end_time = datetime.now()
 
     t = btn.start_time.isoformat(sep=' ', timespec='minutes')
@@ -228,6 +231,7 @@ def btn_tb_gen_released(btn):
     score, rank = updateTable(user)
     updateMenuStats(user, score, rank, secs)
     
+    # menu.disp_key_val()
     menu.update()
 
 def updateChart(btn, new_data_point):
@@ -276,7 +280,8 @@ def updateMenuStats(user, score, rank, secs):
     menu_data['users'][user]['data'] = {
         'rank': rank,
         'score': score,
-        'secs': secs
+        'secs': secs,
+        'disp_key_val': True
     }
 
     with open('public/json/menu.json', 'w') as f:
@@ -287,8 +292,16 @@ enterBtn.when_activated = enterBtn_handler
 exitBtn.when_activated = exitBtn_handler
 downBtn.when_activated = downBtn_handler
 upBtn.when_activated = upBtn_handler
+
 tb1Btn.when_pressed = btn_tb_gen_pressed
 tb1Btn.when_released = btn_tb_gen_released
+
+tb2Btn.when_pressed = btn_tb_gen_pressed
+tb2Btn.when_released = btn_tb_gen_released
+
+# Swapped
+# tb2Btn.when_released = btn_tb_gen_pressed
+# tb2Btn.when_pressed = btn_tb_gen_released
 
 print("Hardware controller started...")
 

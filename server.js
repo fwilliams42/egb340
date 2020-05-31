@@ -13,6 +13,7 @@ app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
 // Python hardware control
 const py = spawn('python3', ['py/controller.py']);
 py.stdout.pipe(process.stdout);
+py.stderr.pipe(process.stderr);
 
 // const py = spawn('python3', ['py/controller.py'],
 //     {stdio: [process.stdin, process.stdout, process.stderr]});
