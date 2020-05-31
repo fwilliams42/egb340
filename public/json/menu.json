@@ -3,22 +3,22 @@
         "Fraser": {
             "data": {
                 "rank": 2,
-                "score": 93,
-                "secs": 188.99,
-                "disp_key_val": true
+                "score": 101,
+                "secs": 202.86,
+                "disp_method": "data"
             },
-            "disp_key_val": false
+            "disp_method": "menu"
         },
         "Blair": {
             "data": {
                 "rank": 1,
-                "score": 111,
-                "secs": 508.8,
-                "disp_key_val": true
+                "score": 113,
+                "secs": 511.73,
+                "disp_method": "data"
             },
-            "disp_key_val": false
+            "disp_method": "menu"
         },
-        "disp_key_val": false
+        "disp_method": "menu"
     },
-    "disp_key_val": false
+    "disp_method": "menu"
 }

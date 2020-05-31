@@ -48,12 +48,11 @@ font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", FON
 class Menu():
     def __init__(self):
 
-        self.parentlist = list()
         with open('public/json/menu.json') as f:
-            self.parentlist.append(json.load(f))
-
-        self.options = list(self.parentlist[0].keys())
-        self.current = self.options[0]
+            self.data = json.load(f)
+            self.path = list()
+            self.options = list(self.data.keys())
+            self.current = self.options[0]
         
     def csr_up(self):
         ind = self.options.index(self.current) # Get the current index
@@ -63,11 +62,10 @@ class Menu():
         else:
             self.current = self.options[-1]
 
-        if self.current == 'disp_key_val':
+        if self.current == 'disp_method':
             self.csr_up()
 
-        if not self.parentlist[-1]['disp_key_val']:
-            self.update()
+        self.disp()
 
     def csr_down(self):
         ind = self.options.index(self.current) # Get the current index
@@ -77,46 +75,58 @@ class Menu():
         else:
             self.current = self.options[0]
 
-        if self.current == 'disp_key_val':
+        if self.current == 'disp_method':
             self.csr_down()
 
-        if not self.parentlist[-1]['disp_key_val']:
-            self.update()
+        self.disp()
             
-        
     def enter(self):
-        
-        temp = self.parentlist[-1][self.current] # Menu option going into
-        # if not isinstance(temp, list):
-        #     return
 
-        self.parentlist.append(temp)
-        self.options = list(temp.keys())
-        self.current = self.options[0]
-        
-        if temp['disp_key_val']:
-            self.disp_key_val()
-        else:
-            self.update()
+        cdir = self.get_dir()
+        if cdir['disp_method'] == 'menu':
+            self.path.append(self.current)
+            self.options = list(cdir[self.current].keys())
+            self.current = self.options[0]
+
+        self.disp()
 
     def exit(self):
 
-        if len(self.parentlist) > 1:
-            self.parentlist.pop()
-            self.options = list(self.parentlist[-1].keys())
+        try:
+            self.path.pop()
+            cdir = self.get_dir()
+            self.options = list(cdir.keys())
             self.current = self.options[0]
-            
-        self.update()
+        except IndexError:
+            pass
+
+        self.disp()
+
+    def disp(self, cdir=None):
+        if cdir is None:
+            cdir = self.get_dir()
+
+        if cdir['disp_method'] == 'menu':
+            self.update()
+        elif cdir['disp_method'] == 'data':
+            self.disp_key_val()
+
+    def get_dir(self):
+        cdir = dict(self.data)
+
+        for p in self.path:
+            cdir = cdir[p]
+
+        return cdir
 
     def update(self):
 
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
-
         for i, text in enumerate(self.options):
-
-            if text == 'disp_key_val':
-                continue
             
+            if text == 'disp_method':
+                continue
+
             if text == self.current:
                 text += " *"
 
@@ -131,11 +141,15 @@ class Menu():
         display.show()
     
     def disp_key_val(self):
+        
+        # self.__init__() # Need to reload the data
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
 
         i = 0
-        for key, val in self.parentlist[-1].items():
-            if key == 'disp_key_val':
+        cdir = self.get_dir()
+        for key, val in cdir.items():
+
+            if key == 'disp_method':
                 continue
             
             text = f"{key}: {val}"
@@ -151,6 +165,10 @@ class Menu():
         
         display.image(image)
         display.show()
+
+    def reload_data(self):
+        with open('public/json/menu.json') as f:
+            self.data = json.load(f)
 
     def timing(self, btn):  
         
@@ -231,8 +249,8 @@ def btn_tb_gen_released(btn):
     score, rank = updateTable(user)
     updateMenuStats(user, score, rank, secs)
     
-    # menu.disp_key_val()
-    menu.update()
+    menu.reload_data()
+    menu.disp()
 
 def updateChart(btn, new_data_point):
     # Add the new data point
@@ -281,7 +299,7 @@ def updateMenuStats(user, score, rank, secs):
         'rank': rank,
         'score': score,
         'secs': secs,
-        'disp_key_val': True
+        'disp_method': 'data'
     }
 
     with open('public/json/menu.json', 'w') as f:
