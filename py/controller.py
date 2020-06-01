@@ -142,7 +142,6 @@ class Menu():
     
     def disp_key_val(self):
         
-        # self.__init__() # Need to reload the data
         draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
 
         i = 0
@@ -190,7 +189,7 @@ class Menu():
             time.sleep(0.2)
             
 menu = Menu()
-menu.update()
+menu.disp()
 
 class TimingButton(Button):
     def __init__(self, pin=None, pull_up=False, active_state=None, bounce_time=None, hold_time=1, hold_repeat=False, pin_factory=None, number=None):
@@ -240,7 +239,7 @@ def btn_tb_gen_released(btn):
     dt = round((btn.end_time - btn.start_time).total_seconds(), 2)
 
     if (dt < 1): # 1 second min otherwise won't count
-        menu.update()
+        menu.disp()
         return
 
     new_data_point = {'t': t, 'y': dt}
