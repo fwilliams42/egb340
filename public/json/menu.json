@@ -2,18 +2,18 @@
     "users": {
         "Fraser": {
             "data": {
-                "rank": 1,
-                "score": 0,
-                "secs": 0,
+                "rank": 2,
+                "score": 15,
+                "secs": 147.31,
                 "disp_method": "data"
             },
             "disp_method": "menu"
         },
         "Blair": {
             "data": {
-                "rank": 2,
-                "score": 0,
-                "secs": 0,
+                "rank": 1,
+                "score": 29,
+                "secs": 293.38,
                 "disp_method": "data"
             },
             "disp_method": "menu"

@@ -55,23 +55,23 @@ forceSyncBtn.addEventListener('click', (e) => {
     $.getJSON('/json/table.json', loadTable);
 });
 
-const toggleLedsBtn = document.querySelector('#toggle-leds');
+// const toggleLedsBtn = document.querySelector('#toggle-leds');
 
-toggleLedsBtn.addEventListener('click', (e) => {
-    console.log('Toggled LEDs was clicked.');
+// toggleLedsBtn.addEventListener('click', (e) => {
+//     console.log('Toggled LEDs was clicked.');
 
-    fetch('/api/toggleLEDs', {method: 'POST'})
-    .then(function(res) {
-      if(res.ok) {
-        console.log('Click was recorded');
-        return;
-      }
-      throw new Error('Request failed.');
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
-});
+//     fetch('/api/toggleLEDs', {method: 'POST'})
+//     .then(function(res) {
+//       if(res.ok) {
+//         console.log('Click was recorded');
+//         return;
+//       }
+//       throw new Error('Request failed.');
+//     })
+//     .catch(function(error) {
+//       console.log(error);
+//     });
+// });
 
 const shutDownBtn = document.querySelector('#reboot');
 

@@ -7,7 +7,14 @@
                 "fill": false,
                 "borderColor": "red",
                 "data": [
-                    
+                    {
+                        "t": "2020-06-01 08:57",
+                        "y": 81.21
+                    },
+                    {
+                        "t": "2020-06-02 09:22",
+                        "y": 57.36
+                    }
                 ]
             },
             {
@@ -15,7 +22,18 @@
                 "fill": false,
                 "borderColor": "blue",
                 "data": [
-                    
+                    {
+                        "t": "2020-06-01 09:01",
+                        "y": 64.03
+                    },
+                    {
+                        "t": "2020-06-01 15:10",
+                        "y": 88.03
+                    },
+                    {
+                        "t": "2020-06-02 08:47",
+                        "y": 44.65
+                    }
                 ]
             }
         ]
@@ -23,7 +41,7 @@
     "options": {
         "title": {
             "display": true,
-            "text": "Seconds Brushed Daily"
+            "text": "Seconds Brushed"
         },
         "scales": {
             "xAxes": [

@@ -171,7 +171,7 @@ class Menu():
 
     def timing(self, btn):  
         
-        while btn.is_pressed: # not
+        while not btn.is_pressed: # not
             draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
             sec = round((datetime.now() - btn.start_time).total_seconds(), 2)
             text = str(sec)
@@ -310,15 +310,18 @@ exitBtn.when_activated = exitBtn_handler
 downBtn.when_activated = downBtn_handler
 upBtn.when_activated = upBtn_handler
 
-tb1Btn.when_pressed = btn_tb_gen_pressed
-tb1Btn.when_released = btn_tb_gen_released
+# tb1Btn.when_pressed = btn_tb_gen_pressed
+# tb1Btn.when_released = btn_tb_gen_released
 
-tb2Btn.when_pressed = btn_tb_gen_pressed
-tb2Btn.when_released = btn_tb_gen_released
+# tb2Btn.when_pressed = btn_tb_gen_pressed
+# tb2Btn.when_released = btn_tb_gen_released
 
 # Swapped
-# tb2Btn.when_released = btn_tb_gen_pressed
-# tb2Btn.when_pressed = btn_tb_gen_released
+# tb1Btn.when_released = btn_tb_gen_pressed
+# tb1Btn.when_pressed = btn_tb_gen_released
+
+tb2Btn.when_released = btn_tb_gen_pressed
+tb2Btn.when_pressed = btn_tb_gen_released
 
 print("Hardware controller started...")
 
@@ -334,6 +337,25 @@ def find(lst, key, value):
 
 def flash_menu():
     print("This will flash the menu")
+    draw.rectangle((0, 0, display.width, display.height), outline=0, fill=0) # Clear drawing
+    
+    with open('public/json/table.json', 'r') as f:
+        table_data = json.load(f)
+
+    for i, val in enumerate(table_data['data']):
+        user = val['first']
+        score = str(val['score'])
+        text = f"{user}: {score}"
+        draw.text(
+                (BORDER, BORDER + i * FONTSIZE),
+                text,
+                font=font,
+                fill=255,
+            )
+    
+    display.image(image)
+    display.show()
+
 
 def toggle_leds():
     print("This will toggle LEDs")
